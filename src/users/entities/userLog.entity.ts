@@ -1,4 +1,4 @@
-import { Field, ObjectType, ID } from '@nestjs/graphql';
+import { Field, ObjectType, ID, GraphQLISODateTime } from '@nestjs/graphql';
 import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { UserEntity } from '@app/users/entities/user.entity';
 
@@ -10,10 +10,12 @@ export class UserLogEntity {
 	id: number;
 
 	@Field( () => UserEntity,  { nullable : true })
-	@ManyToOne(() => UserEntity, userEntity => userEntity.email)
+	@ManyToOne(() => UserEntity, user => user.email, {
+		eager: true
+	})
 	user: UserEntity
 
-	@Field()
+	@Field(() => GraphQLISODateTime)
 	@CreateDateColumn()
 	loggedAt: Date;
 

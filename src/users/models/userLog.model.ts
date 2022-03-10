@@ -1,15 +1,19 @@
-import { Field, ObjectType, ID } from '@nestjs/graphql';
+import { ObjectType, ID, GraphQLISODateTime} from '@nestjs/graphql';
+import { FilterableField, IDField, QueryOptions, PagingStrategies, FilterableUnPagedRelation } from '@nestjs-query/query-graphql';
+import { UserEntity } from '@app/users/entities/user.entity';
 
-@ObjectType()
+@ObjectType('UserLog')
+@FilterableUnPagedRelation("user", () => UserEntity, { disableRemove: true })
+@QueryOptions({ pagingStrategy: PagingStrategies.OFFSET })
 export class UserLogModel {
-	@Field(type => ID)
+	@IDField(() => ID)
 	id: number;
-	@Field({ nullable: true })
-	email: string;
-	@Field()
+	@FilterableField({ nullable: true })
+	email: String;
+	@FilterableField(() => GraphQLISODateTime, { nullable: true })
 	loggedAt: Date;
-	@Field({ nullable: true })
+	@FilterableField({ nullable: true })
 	country: string;
-	@Field({ nullable: true })
+	@FilterableField({ nullable: true })
 	device: string;
 }

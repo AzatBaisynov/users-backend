@@ -7,9 +7,9 @@ import { UpdateUserInput } from '@app/users/inputs/update-user.input';
 import { sign } from 'jsonwebtoken'
 import { JWT_SECRET } from '@app/config/config';
 import { UserModel } from '@app/users/models/user.model';
-import { LoginUserInput } from '../inputs/login-user.input';
+import { LoginUserInput } from '@app/users/inputs/login-user.input';
 import { compare } from 'bcrypt';
-import { UserLogsService } from './userLogs.service';
+import { UserLogsService } from '@app/users/services/userLogs.service';
 
 @Injectable()
 export class UsersService {

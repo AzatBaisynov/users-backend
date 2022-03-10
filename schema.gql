@@ -2,15 +2,93 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+input AddUsersToUserLogInput {
+  """The id of the record."""
+  id: ID!
+
+  """The ids of the relations."""
+  relationIds: [ID!]!
+}
+
+input CreateManyUserLogsInput {
+  """Array of records to create"""
+  userLogs: [CreateUserLog!]!
+}
+
+input CreateOneUserLogInput {
+  """The record to create"""
+  userLog: CreateUserLog!
+}
+
 input CreateUserInput {
   email: String!
   password: String!
+}
+
+input CreateUserLog {
+  country: String
+  device: String
+  email: String
+  id: ID
+  loggedAt: DateTime
+}
+
+input DateFieldComparison {
+  between: DateFieldComparisonBetween
+  eq: DateTime
+  gt: DateTime
+  gte: DateTime
+  in: [DateTime!]
+  is: Boolean
+  isNot: Boolean
+  lt: DateTime
+  lte: DateTime
+  neq: DateTime
+  notBetween: DateFieldComparisonBetween
+  notIn: [DateTime!]
+}
+
+input DateFieldComparisonBetween {
+  lower: DateTime!
+  upper: DateTime!
 }
 
 """
 A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
 """
 scalar DateTime
+
+type DeleteManyResponse {
+  """The number of records deleted."""
+  deletedCount: Int!
+}
+
+input DeleteManyUserLogsInput {
+  """Filter to find records to delete"""
+  filter: UserLogDeleteFilter!
+}
+
+input DeleteOneUserLogInput {
+  """The id of the record to delete."""
+  id: ID!
+}
+
+input IDFilterComparison {
+  eq: ID
+  gt: ID
+  gte: ID
+  iLike: ID
+  in: [ID!]
+  is: Boolean
+  isNot: Boolean
+  like: ID
+  lt: ID
+  lte: ID
+  neq: ID
+  notILike: ID
+  notIn: [ID!]
+  notLike: ID
+}
 
 input LoginUserInput {
   country: String
@@ -20,55 +98,289 @@ input LoginUserInput {
 }
 
 type Mutation {
+  addUsersToUserLog(input: AddUsersToUserLogInput!): UserLog!
+  createManyUserLogs(input: CreateManyUserLogsInput!): [UserLog!]!
+  createOneUserLog(input: CreateOneUserLogInput!): UserLog!
   createUser(createUser: CreateUserInput!): UserModel!
+  deleteManyUserLogs(input: DeleteManyUserLogsInput!): DeleteManyResponse!
+  deleteOneUserLog(input: DeleteOneUserLogInput!): UserLogDeleteResponse!
   login(login: LoginUserInput!): UserModel!
+  setUsersOnUserLog(input: SetUsersOnUserLogInput!): UserLog!
+  updateManyUserLogs(input: UpdateManyUserLogsInput!): UpdateManyResponse!
+  updateOneUserLog(input: UpdateOneUserLogInput!): UserLog!
 }
 
-type PageInfo {
-  endCursor: String
-  hasNextPage: Boolean!
-  hasPreviousPage: Boolean!
-  startCursor: String
+type OffsetPageInfo {
+  """true if paging forward and there are more records."""
+  hasNextPage: Boolean
+
+  """true if paging backwards and there are more records."""
+  hasPreviousPage: Boolean
 }
 
-type PaginatedUserLog {
-  edges: [UserLogEntityEdge!]
-  pageInfo: PageInfo
+input OffsetPaging {
+  """Limit the number of records returned"""
+  limit: Int
+
+  """Offset to start returning records from"""
+  offset: Int
 }
 
 type Query {
-  getAllLoginLogs: [UserLogModel!]!
+  getAllUserLogs(
+    """Specify to filter the records returned."""
+    filter: UserLogFilter = {}
+
+    """Limit or page results."""
+    paging: OffsetPaging = {limit: 10}
+
+    """Specify to sort results."""
+    sorting: [UserLogSort!] = []
+  ): UserLogOffsetConnection!
   getAllUsers: [UserEntity!]!
-  getUserLogs(after: String, before: String, country: String, dateFrom: DateTime, dateTo: DateTime, device: String, email: String, first: Int, last: Int): PaginatedUserLog!
+  userLog(
+    """The id of the record to find."""
+    id: ID!
+  ): UserLog
+  userLogs(
+    """Specify to filter the records returned."""
+    filter: UserLogFilter = {}
+
+    """Limit or page results."""
+    paging: OffsetPaging = {limit: 10}
+
+    """Specify to sort results."""
+    sorting: [UserLogSort!] = []
+  ): UserLogConnection!
+}
+
+input SetUsersOnUserLogInput {
+  """The id of the record."""
+  id: ID!
+
+  """The ids of the relations."""
+  relationIds: [ID!]!
+}
+
+"""Sort Directions"""
+enum SortDirection {
+  ASC
+  DESC
+}
+
+"""Sort Nulls Options"""
+enum SortNulls {
+  NULLS_FIRST
+  NULLS_LAST
+}
+
+input StringFieldComparison {
+  eq: String
+  gt: String
+  gte: String
+  iLike: String
+  in: [String!]
+  is: Boolean
+  isNot: Boolean
+  like: String
+  lt: String
+  lte: String
+  neq: String
+  notILike: String
+  notIn: [String!]
+  notLike: String
+}
+
+type UpdateManyResponse {
+  """The number of records updated."""
+  updatedCount: Int!
+}
+
+input UpdateManyUserLogsInput {
+  """Filter used to find fields to update"""
+  filter: UserLogUpdateFilter!
+
+  """The update to apply to all records found using the filter"""
+  update: UpdateUserLog!
+}
+
+input UpdateOneUserLogInput {
+  """The id of the record to update"""
+  id: ID!
+
+  """The update to apply."""
+  update: UpdateUserLog!
+}
+
+input UpdateUserLog {
+  country: String
+  device: String
+  email: String
+  id: ID
+  loggedAt: DateTime
 }
 
 type UserEntity {
-  createdAt: DateTime!
-  email: String!
-  password: String!
-  updatedAt: DateTime!
-  uuid: ID!
+  createdAt: DateTime
+  email: String
+  updatedAt: DateTime
+  uuid: ID
 }
 
-type UserLogEntity {
-  country: String
-  device: String
-  id: ID!
-  loggedAt: DateTime!
-  user: UserEntity
+input UserEntityFilter {
+  and: [UserEntityFilter!]
+  email: StringFieldComparison
+  or: [UserEntityFilter!]
+  uuid: IDFilterComparison
 }
 
-type UserLogEntityEdge {
-  cursor: String!
-  node: UserLogEntity!
+input UserEntitySort {
+  direction: SortDirection!
+  field: UserEntitySortFields!
+  nulls: SortNulls
 }
 
-type UserLogModel {
+enum UserEntitySortFields {
+  email
+  uuid
+}
+
+type UserLog {
   country: String
   device: String
   email: String
   id: ID!
-  loggedAt: DateTime!
+  loggedAt: DateTime
+  users(
+    """Specify to filter the records returned."""
+    filter: UserEntityFilter = {}
+
+    """Specify to sort results."""
+    sorting: [UserEntitySort!] = []
+  ): [UserEntity!]!
+}
+
+type UserLogAggregateGroupBy {
+  country: String
+  device: String
+  email: String
+  id: ID
+  loggedAt: DateTime
+}
+
+type UserLogAvgAggregate {
+  id: Float
+}
+
+type UserLogConnection {
+  """Array of nodes."""
+  nodes: [UserLog!]!
+
+  """Paging information"""
+  pageInfo: OffsetPageInfo!
+}
+
+type UserLogCountAggregate {
+  country: Int
+  device: Int
+  email: Int
+  id: Int
+  loggedAt: Int
+}
+
+input UserLogDeleteFilter {
+  and: [UserLogDeleteFilter!]
+  country: StringFieldComparison
+  device: StringFieldComparison
+  email: StringFieldComparison
+  id: IDFilterComparison
+  loggedAt: DateFieldComparison
+  or: [UserLogDeleteFilter!]
+}
+
+type UserLogDeleteResponse {
+  country: String
+  device: String
+  email: String
+  id: ID
+  loggedAt: DateTime
+}
+
+input UserLogFilter {
+  and: [UserLogFilter!]
+  country: StringFieldComparison
+  device: StringFieldComparison
+  email: StringFieldComparison
+  id: IDFilterComparison
+  loggedAt: DateFieldComparison
+  or: [UserLogFilter!]
+  user: UserLogFilterUserEntityFilter
+}
+
+input UserLogFilterUserEntityFilter {
+  and: [UserLogFilterUserEntityFilter!]
+  email: StringFieldComparison
+  or: [UserLogFilterUserEntityFilter!]
+  uuid: IDFilterComparison
+}
+
+type UserLogMaxAggregate {
+  country: String
+  device: String
+  email: String
+  id: ID
+  loggedAt: DateTime
+}
+
+type UserLogMinAggregate {
+  country: String
+  device: String
+  email: String
+  id: ID
+  loggedAt: DateTime
+}
+
+type UserLogOffsetConnection {
+  """Array of nodes."""
+  nodes: [UserLog!]!
+
+  """Paging information"""
+  pageInfo: OffsetPageInfo!
+}
+
+input UserLogSort {
+  direction: SortDirection!
+  field: UserLogSortFields!
+  nulls: SortNulls
+}
+
+enum UserLogSortFields {
+  country
+  device
+  email
+  id
+  loggedAt
+}
+
+type UserLogSumAggregate {
+  id: Float
+}
+
+input UserLogUpdateFilter {
+  and: [UserLogUpdateFilter!]
+  country: StringFieldComparison
+  device: StringFieldComparison
+  email: StringFieldComparison
+  id: IDFilterComparison
+  loggedAt: DateFieldComparison
+  or: [UserLogUpdateFilter!]
+}
+
+input UserLogs {
+  createdAt: DateTime
+  email: String
+  updatedAt: DateTime
+  uuid: ID
 }
 
 type UserModel {

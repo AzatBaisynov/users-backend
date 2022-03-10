@@ -9,7 +9,7 @@ const typeormConfig: ConnectionOptions = {
 	database: 'postgres',
 	entities: [__dirname + '/../**/*.entity{.ts,.js}'],
 	synchronize: false,
-	logging: true,
+	logging: false,
 	migrations: [__dirname + '/../migrations/**/*{.ts,.js}'],
 	cli: {
 		migrationsDir: 'src/migrations'

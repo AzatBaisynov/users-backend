@@ -4,19 +4,18 @@ import { CreateUserInput } from '@app/users/inputs/create-user.input';
 import { LoginUserInput } from '@app/users/inputs/login-user.input';
 import { UsersService } from '@app/users/services/users.service';
 import { UserModel } from '@app/users/models/user.model';
+import { UserLogEntity } from '@app/users/entities/userLog.entity';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 import { UseGuards } from '@nestjs/common';
-import { AuthGuard } from '@app/users/security/auth.guard';
-import { UserLogModel } from '@app/users/models/userLog.model';
-import { UserLogsService } from '@app/users/services/userLogs.service';
-import { PaginatedUserLog } from '../models/paginated-userLog';
-import { PaginationArgs } from '../models/pagination.args';
-import { UserLogsFilters } from '../models/userLogsFilters.args';
+import { AuthGuard } from '../security/auth.guard';
 
 @Resolver('User')
 export class UsersResolver {
 	constructor(
 		private readonly userService: UsersService,
-		private readonly userLogService: UserLogsService
+		@InjectRepository(UserLogEntity)
+		private readonly userLogsRepository: Repository<UserLogEntity>,
 	) {
 	}
 
@@ -32,22 +31,10 @@ export class UsersResolver {
 		return this.userService.buildUserResponse(user);
 	}
 
-	@Query(() => [UserLogModel])
-	@UseGuards(new AuthGuard())
-	async getAllLoginLogs(): Promise<UserLogModel[]> {
-		return await this.userLogService.getAllLogs();
-	}
 
 	@Query(() => [UserEntity])
+	@UseGuards(new AuthGuard())
 	async getAllUsers(): Promise<UserEntity[]> {
 		return await this.userService.getAllUsers();
-	}
-
-	@Query(() => PaginatedUserLog)
-	getUserLogs(
-		@Args() pagination: PaginationArgs,
-		@Args() filter: UserLogsFilters
-	): Promise<PaginatedUserLog> {
-		return this.userLogService.getPaginatedUserLogs(pagination, filter);
 	}
 }

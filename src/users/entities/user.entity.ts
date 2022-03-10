@@ -1,28 +1,31 @@
-import { BeforeInsert, Column, CreateDateColumn, Entity,  OneToMany,  PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+import { BeforeInsert, Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 import { hash } from 'bcrypt';
-import { Field, ID, ObjectType } from '@nestjs/graphql';
-import { UserLogEntity } from './userLog.entity';
+import { Field, GraphQLISODateTime, ID, InputType, ObjectType } from '@nestjs/graphql';
+import { UserLogEntity } from '@app/users/entities/userLog.entity';
+import { FilterableField, IDField, PagingStrategies, QueryOptions } from '@nestjs-query/query-graphql';
 
 @ObjectType()
+@InputType('UserLogs')
 @Entity({ name: 'users' })
 export class UserEntity {
 	@Field(() => ID)
+	@IDField(() => ID, { nullable: true })
 	@PrimaryGeneratedColumn()
 	uuid: number;
 
-	@Field()
+	
 	@Column({ nullable: false, unique: true })
+	@FilterableField({ nullable : true })
 	email: string;
 
-	@Field()
 	@CreateDateColumn()
+	@Field(() => GraphQLISODateTime, { nullable: true })
 	createdAt: Date;
 
-	@Field()
 	@UpdateDateColumn()
+	@Field(() => GraphQLISODateTime, { nullable: true })
 	updatedAt: Date;
 
-	@Field()
 	@Column({ nullable: false, select: false })
 	password: string;
 

@@ -10,8 +10,6 @@ export class AuthGuard implements CanActivate {
 		if (!ctx.headers.authorization) {
 			return false;
 		}
-		// console.log(ctx.req.connection.remoteAddress)
-		// console.log(ctx.req.connection)
 		ctx.user = await this.validateToken(ctx.headers.authorization);
 		return true;
 	}
