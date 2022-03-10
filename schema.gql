@@ -1,0 +1,80 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+input CreateUserInput {
+  email: String!
+  password: String!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+input LoginUserInput {
+  country: String
+  email: String!
+  ip: String
+  password: String!
+}
+
+type Mutation {
+  createUser(createUser: CreateUserInput!): UserModel!
+  login(login: LoginUserInput!): UserModel!
+}
+
+type PageInfo {
+  endCursor: String
+  hasNextPage: Boolean!
+  hasPreviousPage: Boolean!
+  startCursor: String
+}
+
+type PaginatedUserLog {
+  edges: [UserLogEntityEdge!]
+  pageInfo: PageInfo
+}
+
+type Query {
+  getAllLoginLogs: [UserLogModel!]!
+  getAllUsers: [UserEntity!]!
+  getUserLogs(after: String, before: String, country: String, dateFrom: DateTime, dateTo: DateTime, device: String, email: String, first: Int, last: Int): PaginatedUserLog!
+}
+
+type UserEntity {
+  createdAt: DateTime!
+  email: String!
+  password: String!
+  updatedAt: DateTime!
+  uuid: ID!
+}
+
+type UserLogEntity {
+  country: String
+  device: String
+  id: ID!
+  loggedAt: DateTime!
+  user: UserEntity
+}
+
+type UserLogEntityEdge {
+  cursor: String!
+  node: UserLogEntity!
+}
+
+type UserLogModel {
+  country: String
+  device: String
+  email: String
+  id: ID!
+  loggedAt: DateTime!
+}
+
+type UserModel {
+  createdAt: DateTime!
+  email: String!
+  token: String!
+  updatedAt: DateTime!
+  uuid: ID!
+}
