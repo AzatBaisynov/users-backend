@@ -35,14 +35,20 @@ $ npm install
 ## Running the app
 
 ```bash
-# development
-$ npm run start
+# development watch mode on Windows
+$ yarn start
 
-# watch mode
-$ npm run start:dev
+# development watch mode on MacOS
+$ yarn start:dev
 
-# production mode
-$ npm run start:prod
+# generate new migration
+$ yarn db:create <MigrationName>
+
+# migrate
+$ yarn db:migrate
+
+# drop db
+$ yarn db:drop
 ```
 
 ## Test
